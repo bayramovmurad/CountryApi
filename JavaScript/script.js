@@ -1,23 +1,48 @@
-document.querySelector("#btnSearch").addEventListener("click", () => {
-    let text = document.querySelector("#txtSearch").value;
+const btnSearch = document.querySelector("#btnSearch");
+const details = document.querySelector("#details");
+const countryDetails = document.querySelector("#country-details");
+const neighbors = document.querySelector("#neighbors");
+const errors = document.querySelector("#errors");
+
+
+btnSearch.addEventListener("click", () => {
+    const text = document.querySelector("#txtSearch").value;
+    details.style.opacity = 0;
     getCountry(text);
 });
 
+
+// We got countries and their neighbor countries with fetch api
 function getCountry(country) {
+    // Country
     fetch('https://restcountries.com/v3.1/name/' + country)
-        .then((response) => { return response.json()})
-        .then((data) => { renderCountry(data[0]);
-        const countries = data[0].borders;
-        return fetch('https://restcountries.com/v3.1/alpha?codes=' + countries.toString());
+        .then((response) => {
+            // Error when entering wrong country
+            if (!response.ok)
+                throw new Error("Country not found");
+            return response.json();
+        })
+        // Neighbors country
+        .then((data) => {
+            renderCountry(data[0]);
+            const countries = data[0].borders;
+            // Error when entering wrong neighbors country
+            if (!countries)
+                throw new Error("Neighbors country not found")
+            return fetch('https://restcountries.com/v3.1/alpha?codes=' + countries.toString());
         })
         .then(response => response.json())
         .then((data) => renderNeighbors(data))
+        // to catch errors in console
+        .catch(err => renderError(err))
 }
 
 
+// Here I got the information of the countries
+
 function renderCountry(data) {
-    document.querySelector("#country-details").innerHTML = "";
-    document.querySelector("#neighbors").innerHTML = "";
+    countryDetails.innerHTML = "";
+    neighbors.innerHTML = "";
 
     let html = `                   
             <div class="col-4">
@@ -45,9 +70,11 @@ function renderCountry(data) {
                 
             </div>
     `;
-
-    document.querySelector("#country-details").innerHTML = html;
+    details.style.opacity = 1;
+    countryDetails.innerHTML = html;
 }
+
+// Here I got the information of the neighboring countries
 
 function renderNeighbors(data) {
     let html = "";
@@ -64,5 +91,19 @@ function renderNeighbors(data) {
         `;
 
     }
-    document.querySelector("#neighbors").innerHTML = html;
+    neighbors.innerHTML = html;
+}
+
+// to print errors on the screen
+function renderError(err) {
+    let html = ''
+    html = `
+        <div class="alert alert-danger">
+        ${err.message}
+        </div>
+    `;
+    setTimeout(() => {
+        errors.innerHTML = "";
+    }, 3000);
+    errors.innerHTML = html;
 }

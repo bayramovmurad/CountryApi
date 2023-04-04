@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,9 +8,22 @@
     <title>CountryApi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+    .col-2 img {
+        height: 120px;
+    }
+    #details {
+        opacity: 0;
+    }
+    
+</style>
+
 <body>
     <div class="container my-5">
+        <!-- Empty div used by js to catch errors with catch -->
+        <div id="errors"></div>
         <div class="card mb-3">
+            <!-- Search Country -->
             <div class="card-body">
                 <div class="input-group">
                     <input id="txtSearch" type="text" class="form-control">
@@ -17,8 +31,9 @@
                 </div>
             </div>
         </div>
-        <div id="details">        
-            <div class="card mb-3" >
+        <div id="details">
+            <!-- Search Results -->
+            <div class="card mb-3">
                 <div class="card-header">Search Results</div>
                 <div class="card-body">
                     <div class="row" id="country-details">
@@ -26,6 +41,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Neighboring Countries -->
             <div class="card mb-3">
                 <div class="card-header">Neighboring Countries</div>
                 <div class="card-body">
@@ -36,8 +52,9 @@
             </div>
         </div>
     </div>
-    
+
 
     <script src="JavaScript/script.js"></script>
 </body>
+
 </html>
